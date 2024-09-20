@@ -1,7 +1,8 @@
 from pydantic import BaseModel
 import data_related as dr
-from fastapi import FastAPI, Depends
-from typing import List 
+from fastapi import FastAPI, Depends, Request
+from fastapi.templating import Jinja2Templates
+from fastapi.responses import HTMLResponse
 
 
 def get_db():
@@ -11,20 +12,32 @@ def get_db():
     finally:
         db.close()
 
+
 app = FastAPI()
-dr.Base.metadata.create_all(bind=dr.engine,checkfirst=True)
+templates = Jinja2Templates(directory="../templates")
+dr.Base.metadata.create_all(bind=dr.engine, checkfirst=True)
 
 
 @app.get("/")
 def read(session: dr.Session = Depends(get_db)):
-    db = dr.read_todo(dr.SessionLocal())
+    db = dr.read_todo(session)
     return db
 
-@app.post("/new_todo")
-def post(do:str, session: dr.Session = Depends(get_db)):
-    pass
-    # create_todo(db: Session, todo: Item)
-    
+
+@app.post("/create/")
+def create(todo: str, session: dr.Session = Depends(get_db)):
+    todo_new = dr.Item(todo=todo)
+    answer = dr.create_todo(session, todo_new)
+    return answer
 
 
-# @app.patch()
+@app.put("/update/{id}/")
+def update(id: int, todo: str, session: dr.Session = Depends(get_db)):
+    answer = dr.update_todo(session, id, todo)
+    return answer
+
+
+@app.delete("/delete/{id}")
+def update(id: int, session: dr.Session = Depends(get_db)):
+    answer = dr.delete_todo(session, id)
+    return answer
