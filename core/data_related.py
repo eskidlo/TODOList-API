@@ -2,7 +2,7 @@ from sqlalchemy import Column, Integer, String
 from sqlalchemy.orm import declarative_base, sessionmaker, Session, declarative_base
 from pydantic import BaseModel,  Field
 from sqlalchemy import create_engine
-from typing import Optional
+from typing import Optional, Any
 
 DATABASE_URL = "sqlite:///../databases/todo.db"
 engine = create_engine(
@@ -26,7 +26,7 @@ class TODO_list(Base):
     todo = Column(String)
 
 
-def create_todo(db: Session, todo: Item) -> bool:
+def create_todo(db: Session, todo: Item) -> str:
     answer = "The task has been created!"
     item = TODO_list(todo=todo.todo)
     try:
@@ -38,7 +38,7 @@ def create_todo(db: Session, todo: Item) -> bool:
     return answer
 
 
-def read_todo(db: Session) -> None:
+def read_todo(db: Session) -> Any:
     all_todo = db.query(TODO_list).all()
     return all_todo
 
@@ -59,7 +59,7 @@ def update_todo(db: Session, id: int, new_todo: str) -> str:
     return answer
 
 
-def delete_todo(db: Session, id: int) -> bool:
+def delete_todo(db: Session, id: int) -> str:
     answer = "The task has been deleted!"
     check = bool(db.query(TODO_list.id).filter_by(id=id).first())
     if check:
