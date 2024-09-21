@@ -1,10 +1,8 @@
-import sqlite3
 from sqlalchemy import Column, Integer, String, select
 from sqlalchemy.orm import declarative_base, sessionmaker, Session, declarative_base
 from pydantic import BaseModel,  Field
 from sqlalchemy import create_engine
 from typing import Optional
-import json
 
 DATABASE_URL = "sqlite:///../databases/todo.db"
 engine = create_engine(
