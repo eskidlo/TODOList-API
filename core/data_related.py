@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, select
+from sqlalchemy import Column, Integer, String
 from sqlalchemy.orm import declarative_base, sessionmaker, Session, declarative_base
 from pydantic import BaseModel,  Field
 from sqlalchemy import create_engine

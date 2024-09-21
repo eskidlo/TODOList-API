@@ -1,8 +1,5 @@
-from pydantic import BaseModel
 import data_related as dr
-from fastapi import FastAPI, Depends, Request
-from fastapi.templating import Jinja2Templates
-from fastapi.responses import HTMLResponse
+from fastapi import FastAPI, Depends
 
 
 def get_db():
@@ -14,7 +11,6 @@ def get_db():
 
 
 app = FastAPI()
-templates = Jinja2Templates(directory="../templates")
 dr.Base.metadata.create_all(bind=dr.engine, checkfirst=True)
 
 
